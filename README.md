@@ -20,6 +20,12 @@ This allows easy and automatic tracking of job applications.
    - If you run with arguments ex. ``` python createTable.py 1000 n ``` -> it will process the newest 1000 emails and NOT save the records to the database.
    - If you run with no arguments ex. ``` python createTable.py ``` -> you will be prompted to input if you want to save or not save to the database. Newest 100 emails will be processed.
 
+### Tips
+
+1. Add the script to your OS task-scheduler and and execute it once a week to keep track of your job applications.
+2. Sometimes the email body cannot be decoded. Search for that specific email manually and add update the database manually.
+3. Modify the script for your own goals. Modify job_tracker.py to save records in a text file instead of a database.
+
 ### Outputs
 ![image](https://github.com/smijal/Job_Application_Tracker/blob/main/Images/console_argv.JPG)
 ![image](https://github.com/smijal/Job_Application_Tracker/blob/main/Images/database_screenshot.JPG)
