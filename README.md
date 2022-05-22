@@ -18,7 +18,7 @@ This allows easy and automatic tracking of job applications.
 6. Run job_tracker.py
    - If you run with arguments ex. ``` python createTable.py 200 y ``` -> it will process the newest 200 emails and save the records into the database.
    - If you run with arguments ex. ``` python createTable.py 1000 n ``` -> it will process the newest 1000 emails and NOT save the records to the database.
-   - If you run with no arguments ex. ``` python createTable.py ``` -> you will be prompted to input if you want to save or not save to the database. Newest 100 emails will be processed.
+   - If you run with no arguments ex. ``` python createTable.py ``` -> you will be prompted [y/n] if you want to save or not save to the database. Newest 100 emails will be processed by default.
 
 ### Tips
 
