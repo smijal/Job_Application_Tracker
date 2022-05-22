@@ -10,5 +10,5 @@ This allows easy and automatic tracking of job applications.
 1. Clone the repository with: ``` git clone https://github.com/smijal/Job_Application_Tracker.git ```
 2. Install requirements with: ``` pip install -r requirements.txt ```
 3. Change the config.ini file: 
-   - ![image]  (Images\configFIle.JPG)
+   - ![image](Images\configFIle.JPG)
 
