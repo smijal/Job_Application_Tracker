@@ -1,5 +1,4 @@
 import imaplib
-import json
 import configparser
 import psycopg2
 from email.utils import parsedate_to_datetime
@@ -192,17 +191,6 @@ def main():
 
     databaseInfo = config_object['DATABASEINFO']
 
-    # Connect to your postgres DB
-    try:
-        print("Connecting to the database...  ", end='')
-        conn = psycopg2.connect(user=databaseInfo['user'], host=databaseInfo['host'], database=databaseInfo['database'],password=databaseInfo['password'])
-    except:
-        print("\nNo internet connection or Invalid credentials. Check your config.ini file...")
-        exit()
-    print("Connected!")
-    # Open a cursor to perform database operations
-    cur = conn.cursor()
-
     status, messages = imap.select('INBOX')
     
     # number of top emails to fetch
@@ -264,32 +252,48 @@ def main():
 
     print('\rFound: {} out of {}'.format(jobRelatedCount,N))
 
-    
-    for email in jobEmailList:
-        addInDatabase(email,cur)
-
+    print("Closing imap server connection...  ",end='')
+    imap.close()
+    imap.logout()
+    print("Closed.")
     #fetchDb(cur)
 
     # If the script is invoked with argument 'y', then it will automatically add to database
-    # If not, it will ask for permission
+    # If the script is invoked with argument 'n' then it will exit without asking, else it will ask for permission
     if( (len(sys.argv)>1 and str(sys.argv[1]) == 'y') or (len(sys.argv)==3 and sys.argv[2] =='y')):
         response = 'y'
+    elif( (len(sys.argv)>1 and str(sys.argv[1]) == 'n') or (len(sys.argv)==3 and sys.argv[2] =='n')):
+        response = 'n'
     else:
         response = input('\nDo you want to add the records to the database? [y for YES] > ')
 
     if(response.lower() == 'y'):
+        # Connect to your postgres DB
+        try:
+            print("Connecting to the database...  ", end='')
+            conn = psycopg2.connect(user=databaseInfo['user'], host=databaseInfo['host'], database=databaseInfo['database'],password=databaseInfo['password'])
+        except:
+            print("\nNo internet connection or Invalid credentials. Check your config.ini file...")
+            exit()
+        print("Connected!")
+
+        # Open a cursor to perform database operations
+        cur = conn.cursor()
+
+        #INSERT RECORDS
+        for email in jobEmailList:
+            addInDatabase(email,cur)
+
         conn.commit()
         print("Successfully added records to the database!")
         print("NOTE: If records already existed in the database, they will be auto-rejected and not overwritten...")
-
-    print("Closing connection...  ",end='')
-    # close the connection and logout
-    imap.close()
-    imap.logout()
-    cur.close()
-    conn.close()
-    print("Closed.")
-
+        # close the connection
+        print("Closing connection...  ",end='')
+        cur.close()
+        conn.close()
+        print("Closed.")
+    
+ 
     printFrame()
 
 if __name__ == "__main__":
